@@ -42,18 +42,12 @@ async def start_handler(message: Message):
     await message.answer("Привет! Я бот, который может общаться с помощью LLM модели. Отправьте мне ваш вопрос.")
 
 
+@router.message(F.text)
+async def llm_request(message: Message):
+    llm_response = await get_llm_response(message.text)
+    await message.answer(llm_response)
+
+
 @router.message()
 async def message_handler(message: Message):
-    """
-    Handle all other messages
-    """
-    user_message = message.text
-
-    # Send "typing" action while processing
-    await message.bot.send_chat_action(message.chat.id, "typing")
-
-    # Get response from LLM
-    llm_response = await get_llm_response(user_message)
-
-    # Send response back to user
-    await message.answer(llm_response)
+    await message.answer("Я понимаю только текстовые запросы")
