@@ -1,5 +1,5 @@
 from aiogram import F, Router
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
 from app.controller import get_qwen_response, reset_context
@@ -13,13 +13,19 @@ async def start_handler(message: Message):
     await message.answer("Привет! Я бот, который может общаться с помощью LLM модели. Отправьте мне ваш вопрос.")
 
 
+@router.message(Command(commands='help'))
+async def process_help_command(message: Message):
+    HELP_TEXT = """
+    Этот бот позволяет общаться с нейросетью, поддерживая контекст беседы.
+    Если хотите начать новый чат - выберите пункт меню 'New Chat'
+    """
+    await message.answer(text=HELP_TEXT)
+
+
 @router.message(F.text)
 async def llm_request(message: Message):
     user_id = message.from_user.id
     user_message = message.text
-
-    # # # Отправляем сообщение о том, что бот печатает
-    # await message.answer("LLM typing...")    ########################################
 
     # Получаем ответ от модели
     response = await get_qwen_response(user_id, user_message)

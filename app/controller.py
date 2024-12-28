@@ -1,9 +1,7 @@
 import requests
 import logging
 
-# LLM API endpoint
 LLM_API_URL = "http://127.0.0.1:1234/v1/chat/completions"
-# Словарь для хранения истории диалогов
 dialog_history: dict[int, list[dict]] = {}
 
 
@@ -31,16 +29,11 @@ async def get_qwen_response(user_id: int, user_message: str) -> str:
         response.raise_for_status()
         assistant_message = response.json()['choices'][0]['message']['content']
 
-        # Сохраняем сообщение пользователя и ответ модели в истории
-        # if user_id not in dialog_history:
-        #     dialog_history[user_id] = []
-
         dialog_history[user_id].append({"role": "user", "content": user_message})
         dialog_history[user_id].append({"role": "assistant", "content": assistant_message})
 
         # Ограничиваем историю последними 10 сообщениями
         dialog_history[user_id] = dialog_history[user_id][-10:]
-        print(dialog_history[user_id])  ##################################
 
         return assistant_message
 

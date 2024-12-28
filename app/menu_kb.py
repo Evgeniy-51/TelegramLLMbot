@@ -7,6 +7,10 @@ async def set_main_menu(bot: Bot):
         BotCommand(
             command='/start',
             description='New chat'
+        ),
+        BotCommand(
+            command='/help',
+            description='Help'
         )
     ]
     await bot.set_my_commands(main_menu_commands)
