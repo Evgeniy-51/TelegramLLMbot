@@ -28,8 +28,6 @@ async def get_qwen_response(user_id: int, user_message: str) -> str:
 
         response.raise_for_status()
         assistant_message = response.json()['choices'][0]['message']['content']
-
-        dialog_history[user_id].append({"role": "user", "content": user_message})
         dialog_history[user_id].append({"role": "assistant", "content": assistant_message})
 
         # Ограничиваем историю последними 10 сообщениями
